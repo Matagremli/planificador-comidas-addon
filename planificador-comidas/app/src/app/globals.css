@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f2ea;
+  --foreground: #2d241b;
+  --surface: #fffaf3;
+  --surface-strong: #fffdf8;
+  --line: #dfd3c3;
+  --muted: #6f6355;
+  --accent: #6f8b4d;
+  --accent-strong: #4f6634;
+  --accent-soft: #e9f0dd;
+  --warm: #cf8752;
+  --font-app: "Trebuchet MS", "Segoe UI", sans-serif;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-strong: var(--surface-strong);
+  --color-line: var(--line);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-warm: var(--warm);
+  --font-sans: var(--font-app);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background:
+    radial-gradient(circle at top, #fff7ee 0%, #f7f2ea 45%, #efe6da 100%);
+}
+
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-app);
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+::selection {
+  background: #d7e4bf;
+  color: #233014;
+}
+
+.app-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top right, rgba(207, 135, 82, 0.16), transparent 26%),
+    radial-gradient(circle at left center, rgba(111, 139, 77, 0.12), transparent 30%);
+}
+
+.card-surface {
+  background: rgba(255, 250, 243, 0.9);
+  border: 1px solid rgba(223, 211, 195, 0.9);
+  box-shadow: 0 16px 40px rgba(90, 68, 44, 0.08);
+}
+
+.tag-chip {
+  border-radius: 999px;
+  border: 1px solid rgba(223, 211, 195, 0.95);
+  background: rgba(255, 253, 248, 0.95);
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+  line-height: 1;
+  color: var(--muted);
+}

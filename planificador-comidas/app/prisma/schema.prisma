@@ -1,0 +1,139 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum RecipeCategory {
+  CARNE
+  PESCADO
+  PASTA
+  ARROZ
+  LEGUMBRE
+  CREMA
+  ENSALADA
+  ACOMPANAMIENTO
+  HORNO
+  RAPIDA
+  OTRO
+}
+
+enum Difficulty {
+  FACIL
+  MEDIA
+  DIFICIL
+}
+
+enum PurchaseCategory {
+  VERDURA_FRUTA
+  CARNE
+  PESCADO
+  LACTEOS
+  HUEVOS
+  DESPENSA
+  CONGELADOS
+  ESPECIAS_SALSAS
+  PANADERIA
+  OTROS
+}
+
+enum WeeklyMenuItemType {
+  PRINCIPAL
+  ENSALADA
+  CREMA
+  ACOMPANAMIENTO
+}
+
+model Recipe {
+  id                  String              @id @default(cuid())
+  name                String              @unique
+  shortDescription    String
+  category            RecipeCategory
+  culinaryBase        String
+  tags                String
+  servings            Int
+  estimatedMinutes    Int
+  difficulty          Difficulty
+  fridgeDays          Int
+  notes               String?
+  isAvailableThisWeek Boolean             @default(true)
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  recipeIngredients   RecipeIngredient[]
+  weeklyMenuItems     WeeklyMenuItem[]
+}
+
+model Ingredient {
+  id                String             @id @default(cuid())
+  name              String             @unique
+  purchaseCategory  PurchaseCategory
+  defaultUnit       String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  recipeIngredients RecipeIngredient[]
+}
+
+model RecipeIngredient {
+  id           String     @id @default(cuid())
+  recipeId     String
+  ingredientId String
+  quantity     Float
+  unit         String
+  recipe       Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Restrict)
+
+  @@unique([recipeId, ingredientId, unit])
+  @@index([recipeId])
+  @@index([ingredientId])
+}
+
+model WeeklyMenu {
+  id                      String           @id @default(cuid())
+  name                    String
+  weekStart               DateTime
+  servings                Int
+  mainDishCount           Int
+  includeSalad            Boolean          @default(true)
+  includeCream            Boolean          @default(true)
+  excludedRecipeIds       String           @default("[]")
+  excludedIngredientNames String           @default("[]")
+  notes                   String?
+  createdAt               DateTime         @default(now())
+  updatedAt               DateTime         @updatedAt
+  rulesetId               String?
+  ruleset                 RuleSet?         @relation(fields: [rulesetId], references: [id], onDelete: SetNull)
+  items                   WeeklyMenuItem[]
+}
+
+model WeeklyMenuItem {
+  id           String             @id @default(cuid())
+  weeklyMenuId String
+  recipeId     String
+  position     Int
+  type         WeeklyMenuItemType
+  explanation  String?
+  weeklyMenu   WeeklyMenu         @relation(fields: [weeklyMenuId], references: [id], onDelete: Cascade)
+  recipe       Recipe             @relation(fields: [recipeId], references: [id], onDelete: Restrict)
+
+  @@unique([weeklyMenuId, position])
+  @@index([recipeId])
+}
+
+model RuleSet {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  isDefault   Boolean      @default(false)
+  config      String
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  weeklyMenus WeeklyMenu[]
+}
