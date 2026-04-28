@@ -22,6 +22,20 @@ const rulesConfig = {
   },
 };
 
+function inferCatalogCategory(recipe) {
+  const tags = new Set(recipe.tags.map((tag) => tag.toLowerCase()));
+
+  if (recipe.category === "CREMA") return "cremas";
+  if (recipe.category === "PESCADO") return "pescados";
+  if (recipe.category === "PASTA") return "pastas";
+  if (recipe.category === "ENSALADA") return "ensaladas";
+  if (recipe.category === "CARNE") return "carnes";
+  if (recipe.category === "ACOMPANAMIENTO") return "guarniciones";
+  if (tags.has("salsa")) return "salsas";
+
+  return "otros";
+}
+
 const recipes = [
   {
     name: "Albóndigas en salsa",
@@ -350,12 +364,14 @@ async function main() {
         name: recipe.name,
         shortDescription: recipe.shortDescription,
         category: recipe.category,
+        catalogCategory: recipe.catalogCategory ?? inferCatalogCategory(recipe),
         culinaryBase: recipe.culinaryBase,
         tags: recipe.tags.join("|"),
         servings: recipe.servings,
         estimatedMinutes: recipe.estimatedMinutes,
         difficulty: recipe.difficulty,
         fridgeDays: recipe.fridgeDays,
+        steps: Array.isArray(recipe.steps) ? recipe.steps.join("\n") : "",
         notes: recipe.notes,
         recipeIngredients: {
           create: recipe.ingredients.map(([name, , quantity, unit]) => ({

@@ -57,12 +57,14 @@ model Recipe {
   name                String              @unique
   shortDescription    String
   category            RecipeCategory
+  catalogCategory     String              @default("otros")
   culinaryBase        String
   tags                String
   servings            Int
   estimatedMinutes    Int
   difficulty          Difficulty
   fridgeDays          Int
+  steps               String              @default("")
   notes               String?
   isAvailableThisWeek Boolean             @default(true)
   createdAt           DateTime            @default(now())

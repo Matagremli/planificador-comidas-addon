@@ -3,8 +3,10 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import {
   difficultyLabels,
+  getCatalogCategoryLabel,
   purchaseCategoryLabels,
   recipeCategoryLabels,
+  splitMultilineText,
   splitTags,
 } from "@/lib/recipes";
 
@@ -40,6 +42,7 @@ export default async function RecipeDetailPage({ params }: RecipeDetailPageProps
   }
 
   const tags = splitTags(recipe.tags);
+  const steps = splitMultilineText(recipe.steps);
 
   return (
     <section className="space-y-6">
@@ -47,6 +50,7 @@ export default async function RecipeDetailPage({ params }: RecipeDetailPageProps
         <div className="flex flex-col gap-4">
           <div className="flex flex-wrap gap-2">
             <span className="tag-chip">{recipeCategoryLabels[recipe.category]}</span>
+            <span className="tag-chip">{getCatalogCategoryLabel(recipe.catalogCategory)}</span>
             <span className="tag-chip">Base: {recipe.culinaryBase}</span>
             <span className="tag-chip">{difficultyLabels[recipe.difficulty]}</span>
           </div>
@@ -83,6 +87,20 @@ export default async function RecipeDetailPage({ params }: RecipeDetailPageProps
               </span>
             ))}
           </div>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Link
+              href={`/recetas/${recipe.id}/editar`}
+              className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-3 text-sm font-extrabold text-white hover:-translate-y-0.5 hover:bg-accent-strong"
+            >
+              Editar receta
+            </Link>
+            <Link
+              href="/recetas"
+              className="inline-flex items-center justify-center rounded-full border border-line bg-surface-strong px-5 py-3 text-sm font-extrabold text-foreground hover:-translate-y-0.5 hover:border-accent"
+            >
+              Volver a recetas
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -114,14 +132,29 @@ export default async function RecipeDetailPage({ params }: RecipeDetailPageProps
           <p className="mt-4 text-sm leading-7 text-muted">
             {recipe.notes || "Sin notas por ahora."}
           </p>
-          <Link
-            href="/recetas"
-            className="mt-6 inline-flex rounded-full border border-line bg-surface-strong px-5 py-3 text-sm font-extrabold text-foreground hover:-translate-y-0.5 hover:border-accent"
-          >
-            Volver a recetas
-          </Link>
         </aside>
       </div>
+
+      <article className="card-surface rounded-[1.75rem] p-6">
+        <h2 className="text-xl font-extrabold text-foreground">Pasos</h2>
+        {steps.length > 0 ? (
+          <ol className="mt-4 space-y-3">
+            {steps.map((step, index) => (
+              <li
+                key={`${index + 1}-${step}`}
+                className="rounded-[1.25rem] border border-line bg-surface-strong px-4 py-3 text-sm leading-7 text-muted"
+              >
+                <span className="mr-2 font-extrabold text-foreground">{index + 1}.</span>
+                {step}
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p className="mt-4 text-sm leading-7 text-muted">
+            Esta receta aun no tiene pasos detallados.
+          </p>
+        )}
+      </article>
     </section>
   );
 }

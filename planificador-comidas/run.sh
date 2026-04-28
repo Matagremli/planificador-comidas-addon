@@ -14,6 +14,8 @@ mkdir -p /data
 if [ ! -f /data/dev.db ]; then
   node scripts/bootstrap-db.mjs
   node prisma/seed.mjs
+else
+  node scripts/ensure-db-schema.mjs
 fi
 
 exec npm run start -- --hostname 0.0.0.0 --port 8099

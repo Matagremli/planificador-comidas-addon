@@ -11,6 +11,7 @@
     "lint": "eslint",
     "db:generate": "prisma generate",
     "db:init": "node scripts/bootstrap-db.mjs",
+    "db:ensure": "node scripts/ensure-db-schema.mjs",
     "db:seed": "node prisma/seed.mjs",
     "db:studio": "prisma studio",
     "addon:sync-ha": "node scripts/sync-ha-addon.mjs"
