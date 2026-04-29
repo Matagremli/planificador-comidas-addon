@@ -55,12 +55,12 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
               Catalogo editable en SQLite
             </span>
             <div>
-              <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
-                Recetas guardadas
+              <h1 className="text-3xl font-black tracking-tight text-foreground sm:text-5xl">
+                Biblioteca de recetas
               </h1>
               <p className="mt-2 max-w-2xl text-base leading-8 text-muted">
-                Filtra por categoria de catalogo, revisa las fichas y edita cada receta sin salir
-                del add-on.
+                Filtra por tipo de comida, revisa las fichas y edita cualquier receta sin salir del
+                add-on.
               </p>
             </div>
           </div>
@@ -80,6 +80,9 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
       </div>
 
       <div className="card-surface rounded-[1.75rem] p-5">
+        <p className="mb-3 text-xs font-extrabold uppercase tracking-[0.22em] text-warm">
+          Filtrar por tipo de comida
+        </p>
         <div className="flex flex-wrap gap-2">
           <Link
             href="/recetas"

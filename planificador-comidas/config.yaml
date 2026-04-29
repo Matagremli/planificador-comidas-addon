@@ -1,5 +1,5 @@
 name: "Planificador de comidas"
-version: "0.1.0"
+version: "0.1.1"
 slug: "planificador_comidas"
 description: "Aplicación web para recetas, menú semanal y lista de la compra."
 url: "https://github.com/Matagremli/planificador-comidas-addon"
